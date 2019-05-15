@@ -1,3 +1,4 @@
+using DGHackerNews.Lib;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -21,6 +22,11 @@ namespace DGHackerNews
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddScoped<IHackerNewsAPI, HackerNewsAPI>();
+            // cache in memory
+            services.AddMemoryCache();
+            // caching response for middlewares
+            services.AddResponseCaching();
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -45,6 +51,8 @@ namespace DGHackerNews
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            // caching response for middlewares
+            app.UseResponseCaching();
 
             app.UseMvc(routes =>
             {

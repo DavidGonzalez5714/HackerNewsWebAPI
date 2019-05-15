@@ -1,0 +1,10 @@
+<div id="stories" class="container">
+  <h2>Hacker News Newest Stories</h2>
+  <ng-container  *ngFor="let newItem of (items | async | paginate: {itemsPerPage: 10, currentPage: pagerPage}) " >
+    <div class="list-group">
+        <app-story-link [item]="newItem | async"></app-story-link>
+    </div>
+  </ng-container>
+
+  <pagination-controls (pageChange)="pagerPage = $event"></pagination-controls>
+</div>
