@@ -31,7 +31,7 @@ namespace DGHackerNews.Controllers
             string getNewStoriesCacheKey = "GetNewestStories";
             List<int> stories = await _cache.GetOrCreateAsync(getNewStoriesCacheKey, entry =>
             {
-                entry.SlidingExpiration = TimeSpan.FromMinutes(5);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
                 return _service.GetNewestStoriesAsync();
             });
             
@@ -43,13 +43,13 @@ namespace DGHackerNews.Controllers
         [Route("GetItemDetails")]
         public async Task<ActionResult<Item>> GetItemDetails(int id)
         {
-            string getItemDetailsCacheKey = "GetItemDetails";
+            string getItemDetailsCacheKey = "GetItemDetails" + id;
 
             //Item item = await _service.GetItemDetailsAsync(id);
             //item.url = "the test should fail here";//added this so I can manually cause the test to fail
             Item item = await _cache.GetOrCreateAsync(getItemDetailsCacheKey, entry =>
             {
-                entry.SlidingExpiration = TimeSpan.FromMinutes(10);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
                 return _service.GetItemDetailsAsync(id);
             });
 
